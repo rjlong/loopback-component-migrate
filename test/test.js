@@ -1,4 +1,5 @@
 'use strict';
+/* global require */
 
 var debug = require('debug')('loopback-component-migrate');
 var _ = require('lodash');
@@ -10,6 +11,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var sinon = require('sinon');
 chai.use(require('sinon-chai'));
+require('mocha-sinon');
 
 var path = require('path');
 var SIMPLE_APP = path.join(__dirname, 'fixtures', 'simple-app');
@@ -85,20 +87,6 @@ describe('loopback db migrate', function() {
       .catch(done);
     });
 
-    describe('migrateByName', function() {
-      it('should set a property on app to indicate that migration is running', function(done) {
-        var self = this;
-        expect(app.migrating).to.be.undefined;
-        var promise = app.models.Migration.migrateByName('0002-somechanges.js');
-        expect(app.migrating).to.be.true;
-        promise.then(function() {
-          expect(app.migrating).to.be.undefined;
-          done();
-        })
-        .catch(done);
-      });
-    });
-
     describe('migrate', function() {
       it('should set a property on app to indicate that migrations are running', function(done) {
         var self = this;
@@ -154,6 +142,25 @@ describe('loopback db migrate', function() {
           })
           .catch(done);
       });
+      it('should not rerun migrations that hae already been run', function(done) {
+        var self = this;
+          app.models.Migration.migrate('up')
+            .then(function() {
+              expect(self.spies.m1Up).to.have.been.called
+              expect(self.spies.m2Up).to.have.been.calledAfter(self.spies.m1Up);
+              expect(self.spies.m3Up).to.have.been.calledAfter(self.spies.m2Up);
+              self.resetSpies();
+            })
+            .then(function() { app.models.Migration.migrate('up')})
+            .then(function() {
+              expect(self.spies.m1Up).not.to.have.been.called;
+              expect(self.spies.m2Up).not.to.have.been.called;
+              expect(self.spies.m3Up).not.to.have.been.called;
+              self.expectNoDown();
+              done();
+            })
+            .catch(done);
+        });
     });
 
     describe('down', function() {

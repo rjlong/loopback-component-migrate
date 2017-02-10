@@ -15,14 +15,10 @@
       "required": true
     }
   },
-  "indexes": {
-    "name_index": {
-      "name": 1
-    }
-  },
   "methods": {
     "migrateTo": {
       "description": "Run all pending migrations",
+      "isStatic": true,
       "http": {
         "path": "/migrate",
         "verb": "get"
@@ -33,26 +29,9 @@
         "description": "Name of the migration script to migrate to. If no name is provided all pending migrations will run."
       }]
     },
-    "migrateByName": {
-      "description": "Run specific migration by name",
-      "http": {
-        "path": "/migrateByName",
-        "verb": "get"
-      },
-      "accepts": [{
-        "arg": "name",
-        "type": "String",
-        "required": true,
-        "description": "Name of the migration script to run."
-      },
-      {
-        "arg" : "record",
-        "type" : "boolean",
-        "required" : false
-      }]
-    },
     "rollbackTo": {
       "description": "Rollback migrations",
+      "isStatic": true,
       "http": {
         "path": "/rollback",
         "verb": "get"

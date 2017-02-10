@@ -1,8 +1,8 @@
 module.exports = {
   up: function(dataSource, next) {
-    process.nextTick(() => next())
+    next();
   },
   down: function(dataSource, next) {
-    process.nextTick(() => next())
+    next();
   }
 };

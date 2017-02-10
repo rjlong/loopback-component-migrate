@@ -1,3 +1,5 @@
+A clone of https://github.com/fullcube/loopback-component-migrate
+
 A library to add simple database migration support to loopback projects.
 
 [![Dependencies](http://img.shields.io/david/fullcube/loopback-component-migrate.svg?style=flat)](https://david-dm.org/fullcube/loopback-component-migrate)
@@ -36,11 +38,11 @@ The usage is based on the node-db-migrate project.
 
 - `migrationsDir`
 
-  [String] : Directory containing migration scripts. *(default: server/migrations)*
+  [Boolean] : Directory containing migration scripts. *(default: server/migrations)*
 
 - `dataSource`
 
-  [String] : Datasource to connect the Migration and MigrationMap models to. *(default: db)*
+  [Boolean] : Datasource to connect the Migration and MigrationMap models to. *(default: db)*
 
 - `acls`
 
